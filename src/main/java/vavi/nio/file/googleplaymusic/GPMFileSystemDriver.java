@@ -6,10 +6,11 @@
 
 package vavi.nio.file.googleplaymusic;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URLEncoder;
+import java.nio.channels.FileChannel;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.AccessMode;
@@ -19,6 +20,7 @@ import java.nio.file.FileStore;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ import vavi.nio.file.Util;
 import vavi.util.Debug;
 
 import static vavi.nio.file.Util.toFilenameString;
+import static vavi.nio.file.Util.toPathString;
 
 
 /**
@@ -62,11 +65,12 @@ public final class GPMFileSystemDriver extends UnixLikeFileSystemDriverBase {
             final GPlayMusic api,
             final Map<String, ?> env) throws IOException {
         super(fileStore, provider);
-Debug.println("here0");
+        api.getConfig().put("isNautilusUser", "true");
+//int c = 0;
         for(Track track : api.getTrackApi().getLibraryTracks()) {
             this.tracks.put(track.getID(), track);
+//            if (c++ > 100) break;
         }
-Debug.println("here1");
     }
 
     /** */
@@ -96,9 +100,18 @@ Debug.println("here1");
                     throw new NoSuchFileException("ignore apple double file: " + path);
                 }
 
-                String filenameString = toFilenameString(path);
+                Object entry;
+                if (path.getNameCount() == 0) {
+                    entry = toPathString(path);
+                } else {
+                    String filenameString = toFilenameString(path);
 Debug.println("path: " + filenameString);
-                Track entry = tracks.get(filenameString.substring(0, filenameString.indexOf(" - ")));
+                    int p = filenameString.indexOf(" - ");
+                    if (p == -1) {
+                        throw new NoSuchFileException(path.toString());
+                    }
+                    entry = tracks.get(filenameString.substring(0, p));
+                }
                 cache.putFile(path, entry);
                 return entry;
             }
@@ -135,7 +148,47 @@ Debug.println("path: " + filenameString);
     public SeekableByteChannel newByteChannel(Path path,
                                               Set<? extends OpenOption> options,
                                               FileAttribute<?>... attrs) throws IOException {
-        throw new UnsupportedOperationException("newByteChannel is not supported by the file system");
+        if (options.contains(StandardOpenOption.WRITE) || options.contains(StandardOpenOption.APPEND)) {
+            return new Util.SeekableByteChannelForWriting(newOutputStream(path, options)) {
+                @Override
+                protected long getLeftOver() throws IOException {
+                    long leftover = 0;
+                    if (options.contains(StandardOpenOption.APPEND)) {
+                        Object entry = cache.getEntry(path);
+                        if (entry != null && Track.class.cast(entry).getEstimatedSize() >= 0) {
+                            leftover = Track.class.cast(entry).getEstimatedSize();
+                        }
+                    }
+                    return leftover;
+                }
+
+                @Override
+                public void close() throws IOException {
+                    System.out.println("SeekableByteChannelForWriting::close");
+                    if (written == 0) {
+                        // TODO no mean
+                        System.out.println("SeekableByteChannelForWriting::close: scpecial: " + path);
+                        java.io.File file = new java.io.File(toPathString(path));
+                        FileInputStream fis = new FileInputStream(file);
+                        FileChannel fc = fis.getChannel();
+                        fc.transferTo(0, file.length(), this);
+                        fis.close();
+                    }
+                    super.close();
+                }
+            };
+        } else {
+            Object entry = cache.getEntry(path);
+            if (isDirectory(entry)) {
+                throw new IsDirectoryException(path.toString());
+            }
+            return new Util.SeekableByteChannelForReading(newInputStream(path, null)) {
+                @Override
+                protected long getSize() {
+                    return Track.class.cast(entry).getEstimatedSize();
+                }
+            };
+        }
     }
 
     @Override
@@ -208,7 +261,7 @@ Debug.println("path: " + filenameString);
             List<Path> list = new ArrayList<>(tracks.size());
 
             for (Track track : tracks.values()) {
-                Path childPath = dir.resolve(URLEncoder.encode(track.getID() + " - " + track.getArtist() + " - " + track.getTitle() + ".mp3", "utf-8"));
+                Path childPath = dir.resolve(track.getID() + " - " + track.getArtist() + " - " + track.getTitle() + ".mp3");
                 list.add(childPath);
             }
 

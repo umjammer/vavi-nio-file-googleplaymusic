@@ -8,4 +8,4 @@ A Java NIO FileSystem implementation for Google Play Music.
 
 | fs        | list | upload | download | copy | move | rm | mkdir | cache | watch | library |
 |-----------|------|--------|----------|------|------|----|-------|-------|-------|---------|
-| googleplaymusic | ✅    | ✅     | ✅       | ✅   | ✅   | ✅ | ✅    | ✅    |       | [vavi-nio-file-googleplaymusic](https://github.com/umjammer/vavi-nio-file-googleplaymusic), [gplaymusic](https://github.com/umjammer/gplaymusic) |
+| googleplaymusic |     |      |        | -   | -   | - | -    | -    | -     | [vavi-nio-file-googleplaymusic](https://github.com/umjammer/vavi-nio-file-googleplaymusic), [gplaymusic](https://github.com/umjammer/gplaymusic) |
