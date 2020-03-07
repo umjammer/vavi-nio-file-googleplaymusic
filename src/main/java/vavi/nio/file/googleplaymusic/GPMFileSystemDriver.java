@@ -164,10 +164,10 @@ Debug.println("path: " + filenameString);
 
                 @Override
                 public void close() throws IOException {
-                    System.out.println("SeekableByteChannelForWriting::close");
+Debug.println("SeekableByteChannelForWriting::close");
                     if (written == 0) {
                         // TODO no mean
-                        System.out.println("SeekableByteChannelForWriting::close: scpecial: " + path);
+Debug.println("SeekableByteChannelForWriting::close: scpecial: " + path);
                         java.io.File file = new java.io.File(toPathString(path));
                         FileInputStream fis = new FileInputStream(file);
                         FileChannel fc = fis.getChannel();
