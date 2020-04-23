@@ -8,4 +8,18 @@ A Java NIO FileSystem implementation for Google Play Music.
 
 | fs        | list | upload | download | copy | move | rm | mkdir | cache | watch | library |
 |-----------|------|--------|----------|------|------|----|-------|-------|-------|---------|
-| googleplaymusic | ✅   | -    | ✅      | -   | -   | - | -    | -    | -     | [vavi-nio-file-googleplaymusic](https://github.com/umjammer/vavi-nio-file-googleplaymusic), [gplaymusic](https://github.com/umjammer/gplaymusic) |
+| googleplaymusic | ✅   | -    | ✅      | -   | -   | - | -    | -    | -     | [gplaymusic](https://github.com/umjammer/gplaymusic) |
+
+## Install
+
+https://jitpack.io/#umjammer/vavi-nio-file-googleplaymusic
+
+## Usage
+
+prepare a property file.
+
+```shell
+$ cat ${HOME}/.vavifuse/googleplaymusic.properties
+googleplaymusic.androidId=your_android_id
+googleplaymusic.password.xxx@yyy.zzz=your_password
+```

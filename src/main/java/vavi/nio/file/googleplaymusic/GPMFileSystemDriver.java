@@ -260,6 +260,7 @@ Debug.println("SeekableByteChannelForWriting::close: scpecial: " + path);
         if (dir.getNameCount() == 0) {
             List<Path> list = new ArrayList<>(tracks.size());
 
+            // TODO use hierarchy by artist or genre and alubm
             for (Track track : tracks.values()) {
                 Path childPath = dir.resolve(track.getID() + " - " + track.getArtist() + " - " + track.getTitle() + ".mp3");
                 list.add(childPath);
