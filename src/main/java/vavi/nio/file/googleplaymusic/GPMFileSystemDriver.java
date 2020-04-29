@@ -86,8 +86,6 @@ public final class GPMFileSystemDriver extends UnixLikeFileSystemDriverBase {
     /** */
     private Cache<Object> cache = new Cache<Object>() {
         /**
-         * TODO when the parent is not cached
-         * 
          * @see #ignoreAppleDouble
          * @throws NoSuchFileException must be thrown when the path is not found
          *             in this cache
