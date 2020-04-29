@@ -141,7 +141,7 @@ Debug.println("path: " + filenameString);
     @Override
     public DirectoryStream<Path> newDirectoryStream(final Path dir,
                                                     final DirectoryStream.Filter<? super Path> filter) throws IOException {
-        return Util.newDirectoryStream(getDirectoryEntries(dir));
+        return Util.newDirectoryStream(getDirectoryEntries(dir), filter);
     }
 
     @Override
