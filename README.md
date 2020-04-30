@@ -1,4 +1,4 @@
-[![Release](https://jitpack.io/v/umjammer/vavi-nio-file-googleplaymusic.svg)](https://jitpack.io/#umjammer/vavi-nio-file-googleplaymusic) [![Actions Status](https://github.com/umjammer/vavi-nio-file-googleplaymusic/workflows/Java%20CI/badge.svg)](https://github.com/umjammer/vavi-nio-file-googleplaymusic/actions)
+[![Release](https://jitpack.io/v/umjammer/vavi-nio-file-googleplaymusic.svg)](https://jitpack.io/#umjammer/vavi-nio-file-googleplaymusic) [![Actions Status](https://github.com/umjammer/vavi-nio-file-googleplaymusic/workflows/Java%20CI/badge.svg)](https://github.com/umjammer/vavi-nio-file-googleplaymusic/actions) [![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
 # vavi-nio-file-googleplaymusic
 
