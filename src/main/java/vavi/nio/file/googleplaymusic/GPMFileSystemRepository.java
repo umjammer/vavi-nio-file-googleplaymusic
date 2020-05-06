@@ -48,17 +48,17 @@ public final class GPMFileSystemRepository extends FileSystemRepositoryBase {
     }
 
     /** should have a constructor without args */
-    @Property
+    @Property(value = "vavi.net.auth.oauth2.googleplaymusic.GPMLocalAuthenticator")
     private String authenticatorClassName = "vavi.net.auth.oauth2.googleplaymusic.GPMLocalAuthenticator";
 
     /* */
     {
         try {
             PropsEntity.Util.bind(this);
-Debug.println("authenticatorClassName: " + authenticatorClassName);
         } catch (Exception e) {
 Debug.println(Level.WARNING, "no googleplaymusic.properties in classpath, use defaut");
         }
+Debug.println("authenticatorClassName: " + authenticatorClassName);
     }
 
     /**

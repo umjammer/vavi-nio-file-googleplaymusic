@@ -44,6 +44,7 @@
                 <TEST_ANDROID_ID>${test.android_id}</TEST_ANDROID_ID>
                 <TEST_FILTER>${test.filter}</TEST_FILTER>
               </environmentVariables>
+              <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties</argLine>
             </configuration>
           </plugin>
         </plugins>
@@ -62,6 +63,9 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.22.2</version>
+            <configuration>
+              <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties</argLine>
+            </configuration>
           </plugin>
         </plugins>
       </build>
