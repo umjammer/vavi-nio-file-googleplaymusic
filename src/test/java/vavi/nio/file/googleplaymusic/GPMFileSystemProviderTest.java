@@ -54,7 +54,7 @@ class GPMFileSystemProviderTest {
         env.put(GPMFileSystemProvider.ENV_APP_CREDENTIAL, new GPMTestAppCredential());
         env.put(GPMFileSystemProvider.ENV_USER_CREDENTIAL, new GPMTestUserCredential(email));
 
-        URI uri = URI.create("googleplaymusic:///?id=" + email);
+        URI uri = URI.create("googleplaymusic:///");
 
         FileSystem fs = FileSystems.newFileSystem(uri, env);
         Files.newDirectoryStream(fs.getPath("/"), filter).forEach(System.err::println);

@@ -45,6 +45,7 @@
                 <TEST_FILTER>${test.filter}</TEST_FILTER>
               </environmentVariables>
               <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties</argLine>
+              <trimStackTrace>false</trimStackTrace>
             </configuration>
           </plugin>
         </plugins>
@@ -65,6 +66,7 @@
             <version>2.22.2</version>
             <configuration>
               <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties</argLine>
+              <trimStackTrace>false</trimStackTrace>
             </configuration>
           </plugin>
         </plugins>
@@ -103,7 +105,7 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>java7-fs-base</artifactId>
-      <version>0.0.5v</version>
+      <version>0.0.6v</version>
     </dependency>
 
     <dependency>
