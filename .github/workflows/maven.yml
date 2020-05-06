@@ -26,4 +26,8 @@ jobs:
         TEST_PASSWORD : ${{ secrets.TEST_PASSWORD }}
         TEST_ANDROID_ID : ${{ secrets.TEST_ANDROID_ID }}
         TEST_FILTER : "*Aimer*"
-      run: mvn -B package --file pom.xml
+      run: |
+        mkdir ~/.vavifuse
+        touch ~/.vavifuse/googleplaymusic.properties
+        touch ~/.vavifuse/credentials.properties
+        mvn -e -X -B package --file pom.xml
