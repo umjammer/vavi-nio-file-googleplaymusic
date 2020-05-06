@@ -10,8 +10,7 @@
       <id>local (not on github)</id>
       <activation>
         <property>
-          <name>env.GITHUB_WORKFLOW</name>
-          <value>!true</value>
+          <name>!env.GITHUB_WORKFLOW</name>
         </property>
       </activation>
       <build>
@@ -55,7 +54,6 @@
       <activation>
         <property>
           <name>env.GITHUB_WORKFLOW</name>
-          <value>true</value>
         </property>
       </activation>
       <build>
