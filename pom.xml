@@ -7,11 +7,12 @@
 
   <profiles>
     <profile>
-      <id>local (assume on mac)</id>
+      <id>local (not on github)</id>
       <activation>
-        <os>
-          <family>mac</family>
-        </os>
+        <property>
+          <name>env.GITHUB_WORKFLOW</name>
+          <value>!true</value>
+        </property>
       </activation>
       <build>
         <plugins>
@@ -45,6 +46,24 @@
                 <TEST_FILTER>${test.filter}</TEST_FILTER>
               </environmentVariables>
             </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>github workflow</id>
+      <activation>
+        <property>
+          <name>env.GITHUB_WORKFLOW</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.22.2</version>
           </plugin>
         </plugins>
       </build>
