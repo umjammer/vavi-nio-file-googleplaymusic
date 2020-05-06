@@ -19,7 +19,9 @@ public final class GPMFileSystemProvider extends FileSystemProviderBase {
 
     public static final String PARAM_ID = "id";
 
-    public static final String ENV_CREDENTIAL = "credential";
+    public static final String ENV_USER_CREDENTIAL = "user_credential";
+
+    public static final String ENV_APP_CREDENTIAL = "app_credential";
 
     public GPMFileSystemProvider() {
         super(new GPMFileSystemRepository());

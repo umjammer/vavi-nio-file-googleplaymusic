@@ -9,17 +9,13 @@ package vavi.nio.file.googleplaymusic;
 import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-
-import vavi.net.auth.oauth2.Credential;
-import vavi.net.auth.oauth2.googleplaymusic.GPMLocalAppCredential;
-import vavi.util.properties.annotation.PropsEntity;
-
-import static org.junit.jupiter.api.Assertions.fail;
 
 import co.paralleluniverse.javafs.JavaFS;
 
@@ -40,13 +36,7 @@ class GPMFileSystemProviderTest {
 
         URI uri = URI.create("googleplaymusic:///?id=" + email);
 
-        Credential appCredential = new GPMLocalAppCredential();
-        PropsEntity.Util.bind(appCredential);
-
-        Map<String, Object> env = new HashMap<>();
-        env.put(GPMFileSystemProvider.ENV_CREDENTIAL, appCredential);
-
-        FileSystem fs = FileSystems.newFileSystem(uri, env);
+        FileSystem fs = FileSystems.newFileSystem(uri, Collections.EMPTY_MAP);
 
         Map<String, String> options = new HashMap<>();
         options.put("fsname", "googleplaymusic_fs" + "@" + System.currentTimeMillis());
@@ -56,8 +46,18 @@ class GPMFileSystemProviderTest {
     }
 
     @Test
-    void test() {
-        fail("Not yet implemented");
+    void test() throws Exception {
+        String email = System.getenv("TEST_ACCOUNT");
+        String filter = System.getenv("TEST_FILTER");
+
+        Map<String, Object> env = new HashMap<>();
+        env.put(GPMFileSystemProvider.ENV_APP_CREDENTIAL, new GPMTestAppCredential());
+        env.put(GPMFileSystemProvider.ENV_USER_CREDENTIAL, new GPMTestUserCredential(email));
+
+        URI uri = URI.create("googleplaymusic:///?id=" + email);
+
+        FileSystem fs = FileSystems.newFileSystem(uri, env);
+        Files.newDirectoryStream(fs.getPath("/"), filter).forEach(System.err::println);
     }
 }
 

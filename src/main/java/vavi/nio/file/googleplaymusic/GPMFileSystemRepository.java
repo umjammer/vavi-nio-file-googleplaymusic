@@ -20,8 +20,11 @@ import com.github.felixgail.gplaymusic.api.GPlayMusic;
 import com.github.fge.filesystem.driver.FileSystemDriver;
 import com.github.fge.filesystem.provider.FileSystemRepositoryBase;
 
+import vavi.net.auth.oauth2.AppCredential;
+import vavi.net.auth.oauth2.UserCredential;
 import vavi.net.auth.oauth2.googleplaymusic.GPMLocalAppCredential;
 import vavi.net.auth.oauth2.googleplaymusic.GPMLocalAuthenticator;
+import vavi.net.auth.oauth2.googleplaymusic.GPMLocalUserCredential;
 import vavi.util.Debug;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
@@ -45,8 +48,8 @@ public final class GPMFileSystemRepository extends FileSystemRepositoryBase {
     }
 
     /** should have a constructor without args */
-    @Property(value = "vavi.net.auth.oauth2.googleplaymusic.GPMLocalAuthenticator")
-    private String authenticatorClassName;
+    @Property
+    private String authenticatorClassName = "vavi.net.auth.oauth2.googleplaymusic.GPMLocalAuthenticator";
 
     /* */
     {
@@ -55,7 +58,6 @@ public final class GPMFileSystemRepository extends FileSystemRepositoryBase {
 Debug.println("authenticatorClassName: " + authenticatorClassName);
         } catch (Exception e) {
 Debug.println(Level.WARNING, "no googleplaymusic.properties in classpath, use defaut");
-            authenticatorClassName = "vavi.net.auth.oauth2.googleplaymusic.GPMLocalAuthenticator";
         }
     }
 
@@ -67,19 +69,38 @@ Debug.println(Level.WARNING, "no googleplaymusic.properties in classpath, use de
     @Nonnull
     @Override
     public FileSystemDriver createDriver(final URI uri, final Map<String, ?> env) throws IOException {
+        // 1. user credential
+        UserCredential userCredential = null;
+
         Map<String, String> params = getParamsMap(uri);
-        if (!params.containsKey(GPMFileSystemProvider.PARAM_ID)) {
-            throw new NoSuchElementException("uri not contains a param " + GPMFileSystemProvider.PARAM_ID);
+        if (params.containsKey(GPMFileSystemProvider.PARAM_ID)) {
+            String email = params.get(GPMFileSystemProvider.PARAM_ID);
+            userCredential = new GPMLocalUserCredential(email);
         }
-        final String email = params.get(GPMFileSystemProvider.PARAM_ID);
 
-        if (!env.containsKey(GPMFileSystemProvider.ENV_CREDENTIAL)) {
-            throw new NoSuchElementException("app credential not contains a param " + GPMFileSystemProvider.ENV_CREDENTIAL);
+        if (env.containsKey(GPMFileSystemProvider.ENV_USER_CREDENTIAL)) {
+            userCredential = UserCredential.class.cast(env.get(GPMFileSystemProvider.ENV_USER_CREDENTIAL));
         }
-        GPMLocalAppCredential appCredential = GPMLocalAppCredential.class.cast(env.get(GPMFileSystemProvider.ENV_CREDENTIAL));
 
+        if (userCredential == null) {
+            throw new NoSuchElementException("uri not contains a param " + GPMFileSystemProvider.PARAM_ID + " nor " +
+                                             "env not contains a param " + GPMFileSystemProvider.ENV_USER_CREDENTIAL);
+        }
+
+        // 2. app credential
+        AppCredential appCredential = null;
+
+        if (env.containsKey(GPMFileSystemProvider.ENV_APP_CREDENTIAL)) {
+            appCredential = AppCredential.class.cast(env.get(GPMFileSystemProvider.ENV_APP_CREDENTIAL));
+        }
+
+        if (appCredential == null) {
+            appCredential = new GPMLocalAppCredential(); // TODO use prop
+        }
+
+        // 3. process
         GPMLocalAuthenticator authenticator = getAuthenticator(appCredential.getClientId());
-        AuthToken authToken = authenticator.authorize(email);
+        AuthToken authToken = authenticator.authorize(userCredential);
         GPlayMusic api = new GPlayMusic.Builder().setDebug(false).setAuthToken(authToken).setAndroidID(appCredential.getClientId()).build();
         final GPMFileStore fileStore = new GPMFileStore(api, factoryProvider.getAttributesFactory());
         return new GPMFileSystemDriver(fileStore, factoryProvider, api, env);

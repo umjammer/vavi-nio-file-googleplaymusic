@@ -16,10 +16,34 @@ https://jitpack.io/#umjammer/vavi-nio-file-googleplaymusic
 
 ## Usage
 
-prepare a property file.
+prepare 2 property files.
+
+ * application credential
 
 ```shell
 $ cat ${HOME}/.vavifuse/googleplaymusic.properties
 googleplaymusic.androidId=your_android_id
+```
+
+ * user credential
+
+```shell
+$ cat ${HOME}/.vavifuse/credentials.properties
 googleplaymusic.password.xxx@yyy.zzz=your_password
 ```
+
+## Test
+
+```shell
+$ cp local.properties.sample local.properties
+$ vi local.properties
+test.account=your_account@gmail.com
+test.password=your_password
+test.android_id=your_android_id
+test.filter=*Your Artist Name*
+$ mvn test
+```
+
+## Sample
+
+https://github.com/umjammer/vavi-nio-file-googleplaymusic/blob/master/src/test/java/vavi/nio/file/googleplaymusic/GPMFileSystemProviderTest.java
