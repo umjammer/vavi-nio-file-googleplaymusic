@@ -72,14 +72,14 @@ Debug.println("authenticatorClassName: " + authenticatorClassName);
         // 1. user credential
         UserCredential userCredential = null;
 
-        Map<String, String> params = getParamsMap(uri);
-        if (params.containsKey(GPMFileSystemProvider.PARAM_ID)) {
-            String email = params.get(GPMFileSystemProvider.PARAM_ID);
-            userCredential = new GPMLocalUserCredential(email);
-        }
-
         if (env.containsKey(GPMFileSystemProvider.ENV_USER_CREDENTIAL)) {
             userCredential = UserCredential.class.cast(env.get(GPMFileSystemProvider.ENV_USER_CREDENTIAL));
+        }
+
+        Map<String, String> params = getParamsMap(uri);
+        if (userCredential == null && params.containsKey(GPMFileSystemProvider.PARAM_ID)) {
+            String email = params.get(GPMFileSystemProvider.PARAM_ID);
+            userCredential = new GPMLocalUserCredential(email);
         }
 
         if (userCredential == null) {
