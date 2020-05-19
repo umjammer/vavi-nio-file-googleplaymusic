@@ -10,8 +10,8 @@ import java.io.IOException;
 
 import com.github.felixgail.gplaymusic.util.TokenProvider;
 
-import vavi.net.auth.oauth2.Authenticator;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.Authenticator;
+import vavi.net.auth.UserCredential;
 
 import svarzee.gps.gpsoauth.AuthToken;
 import svarzee.gps.gpsoauth.Gpsoauth.TokenRequestFailed;

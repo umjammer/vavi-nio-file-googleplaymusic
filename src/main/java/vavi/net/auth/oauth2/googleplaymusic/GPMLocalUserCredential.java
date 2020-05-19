@@ -6,7 +6,7 @@
 
 package vavi.net.auth.oauth2.googleplaymusic;
 
-import vavi.net.auth.oauth2.BaseLocalUserCredential;
+import vavi.net.auth.BaseLocalUserCredential;
 import vavi.util.properties.annotation.Property;
 import vavi.util.properties.annotation.PropsEntity;
 

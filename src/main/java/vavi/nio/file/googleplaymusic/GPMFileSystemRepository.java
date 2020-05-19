@@ -20,8 +20,8 @@ import com.github.felixgail.gplaymusic.api.GPlayMusic;
 import com.github.fge.filesystem.driver.FileSystemDriver;
 import com.github.fge.filesystem.provider.FileSystemRepositoryBase;
 
-import vavi.net.auth.oauth2.AppCredential;
-import vavi.net.auth.oauth2.UserCredential;
+import vavi.net.auth.AppCredential;
+import vavi.net.auth.UserCredential;
 import vavi.net.auth.oauth2.googleplaymusic.GPMLocalAppCredential;
 import vavi.net.auth.oauth2.googleplaymusic.GPMLocalAuthenticator;
 import vavi.net.auth.oauth2.googleplaymusic.GPMLocalUserCredential;

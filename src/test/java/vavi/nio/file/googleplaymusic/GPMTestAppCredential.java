@@ -6,8 +6,8 @@
 
 package vavi.nio.file.googleplaymusic;
 
-import vavi.net.auth.oauth2.AppCredential;
-import vavi.net.auth.oauth2.BaseLocalAppCredential;
+import vavi.net.auth.AppCredential;
+import vavi.net.auth.BaseLocalAppCredential;
 import vavi.util.properties.annotation.Env;
 import vavi.util.properties.annotation.PropsEntity;
 
