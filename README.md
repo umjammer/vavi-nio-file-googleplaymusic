@@ -32,6 +32,10 @@ $ cat ${HOME}/.vavifuse/credentials.properties
 googleplaymusic.password.xxx@yyy.zzz=your_password
 ```
 
+### Sample
+
+https://github.com/umjammer/vavi-nio-file-googleplaymusic/blob/master/src/test/java/vavi/nio/file/googleplaymusic/GPMFileSystemProviderTest.java
+
 ## Test
 
 ```shell
@@ -43,7 +47,3 @@ test.android_id=your_android_id
 test.filter=*Your Artist Name*
 $ mvn test
 ```
-
-## Sample
-
-https://github.com/umjammer/vavi-nio-file-googleplaymusic/blob/master/src/test/java/vavi/nio/file/googleplaymusic/GPMFileSystemProviderTest.java

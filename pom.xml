@@ -3,7 +3,13 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-nio-file-googleplaymusic</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
+
+  <name>vavi-nio-file-googleplaymusic</name>
+  <url>https://github.com/umjammer/vavi-nio-file-googleplaymusic</url>
+  <scm>
+    <url>https://github.com/umjammer/vavi-nio-file-googleplaymusic</url>
+  </scm>
 
   <profiles>
     <profile>
@@ -48,7 +54,7 @@
                 <TEST_ANDROID_ID>${test.android_id}</TEST_ANDROID_ID>
                 <TEST_FILTER>${test.filter}</TEST_FILTER>
               </environmentVariables>
-              <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties</argLine>
+              <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
               <trimStackTrace>false</trimStackTrace>
             </configuration>
           </plugin>
@@ -69,7 +75,7 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <version>2.22.2</version>
             <configuration>
-              <argLine>-Djava.util.logging.config.file=src/test/resources/logging.properties</argLine>
+              <argLine>-Djava.util.logging.config.file=${project.build.testOutputDirectory}/logging.properties</argLine>
               <trimStackTrace>false</trimStackTrace>
             </configuration>
           </plugin>
@@ -109,25 +115,25 @@
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>java7-fs-base</artifactId>
-      <version>0.0.6v</version>
+      <version>0.0.7v</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-commons</artifactId>
-      <version>1.0.16</version>
+      <version>1.1.0</version>
     </dependency>
 
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-nio-file</artifactId>
-      <version>0.0.3</version>
+      <version>0.0.7</version>
     </dependency>
 
     <dependency>
-      <groupId>com.github.umjammer</groupId>
-      <artifactId>vavi-net-auth</artifactId>
-      <version>0.0.7</version>
+      <groupId>com.github.umjammer.vavi-net-auth</groupId>
+      <artifactId>vavi-net-auth-common</artifactId>
+      <version>0.1.1</version>
     </dependency>
 
     <dependency>
