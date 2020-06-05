@@ -10,14 +10,13 @@ import java.net.URI;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import co.paralleluniverse.javafs.JavaFS;
+import vavi.net.fuse.Fuse;
 
 
 /**
@@ -38,11 +37,13 @@ class GPMFileSystemProviderTest {
 
         FileSystem fs = FileSystems.newFileSystem(uri, Collections.EMPTY_MAP);
 
-        Map<String, String> options = new HashMap<>();
+        Map<String, Object> options = new HashMap<>();
         options.put("fsname", "googleplaymusic_fs" + "@" + System.currentTimeMillis());
         options.put("noappledouble", null);
+        options.put(vavi.net.fuse.javafs.JavaFSFuse.ENV_DEBUG, false);
+        options.put(vavi.net.fuse.javafs.JavaFSFuse.ENV_READ_ONLY, false);
 
-        JavaFS.mount(fs, Paths.get(args[0]), true, false, options);
+        Fuse.getFuse().mount(fs, args[0], options);
     }
 
     @Test
