@@ -3,7 +3,7 @@
 
   <groupId>vavi</groupId>
   <artifactId>vavi-nio-file-googleplaymusic</artifactId>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
 
   <name>vavi-nio-file-googleplaymusic</name>
   <url>https://github.com/umjammer/vavi-nio-file-googleplaymusic</url>
@@ -116,18 +116,18 @@
       <groupId>com.github.umjammer</groupId>
       <artifactId>java7-fs-base</artifactId>
       <version>0.0.7v</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.github.umjammer</groupId>
-      <artifactId>vavi-commons</artifactId>
-      <version>1.1.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.github.umjammer</groupId>
+          <artifactId>vavi-commons</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>com.github.umjammer</groupId>
       <artifactId>vavi-nio-file</artifactId>
-      <version>0.0.7</version>
+      <version>0.0.9</version>
     </dependency>
 
     <dependency>
