@@ -6,12 +6,9 @@
 
 package vavi.nio.file.googleplaymusic;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.FileChannel;
-import java.nio.channels.SeekableByteChannel;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.AccessMode;
 import java.nio.file.CopyOption;
@@ -20,7 +17,6 @@ import java.nio.file.FileStore;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.spi.FileSystemProvider;
 import java.util.ArrayList;
@@ -35,7 +31,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.github.felixgail.gplaymusic.api.GPlayMusic;
 import com.github.felixgail.gplaymusic.model.Track;
 import com.github.felixgail.gplaymusic.model.enums.StreamQuality;
-import com.github.fge.filesystem.driver.UnixLikeFileSystemDriverBase;
+import com.github.fge.filesystem.driver.ExtendedFileSystemDriverBase;
 import com.github.fge.filesystem.exceptions.IsDirectoryException;
 import com.github.fge.filesystem.provider.FileSystemFactoryProvider;
 
@@ -54,7 +50,7 @@ import static vavi.nio.file.Util.toPathString;
  * @version 0.00 2020/02/15 umjammer initial version <br>
  */
 @ParametersAreNonnullByDefault
-public final class GPMFileSystemDriver extends UnixLikeFileSystemDriverBase {
+public final class GPMFileSystemDriver extends ExtendedFileSystemDriverBase {
 
     private boolean ignoreAppleDouble = false;
 
@@ -143,53 +139,6 @@ Debug.println("path: " + filenameString);
     }
 
     @Override
-    public SeekableByteChannel newByteChannel(Path path,
-                                              Set<? extends OpenOption> options,
-                                              FileAttribute<?>... attrs) throws IOException {
-        if (options != null && Util.isWriting(options)) {
-            return new Util.SeekableByteChannelForWriting(newOutputStream(path, options)) {
-                @Override
-                protected long getLeftOver() throws IOException {
-                    long leftover = 0;
-                    if (options.contains(StandardOpenOption.APPEND)) {
-                        Object entry = cache.getEntry(path);
-                        if (entry != null && Track.class.cast(entry).getEstimatedSize() >= 0) {
-                            leftover = Track.class.cast(entry).getEstimatedSize();
-                        }
-                    }
-                    return leftover;
-                }
-
-                @Override
-                public void close() throws IOException {
-Debug.println("SeekableByteChannelForWriting::close");
-                    if (written == 0) {
-                        // TODO no mean
-Debug.println("SeekableByteChannelForWriting::close: scpecial: " + path);
-                        java.io.File file = new java.io.File(toPathString(path));
-                        FileInputStream fis = new FileInputStream(file);
-                        FileChannel fc = fis.getChannel();
-                        fc.transferTo(0, file.length(), this);
-                        fis.close();
-                    }
-                    super.close();
-                }
-            };
-        } else {
-            Object entry = cache.getEntry(path);
-            if (isDirectory(entry)) {
-                throw new IsDirectoryException(path.toString());
-            }
-            return new Util.SeekableByteChannelForReading(newInputStream(path, null)) {
-                @Override
-                protected long getSize() {
-                    return Track.class.cast(entry).getEstimatedSize();
-                }
-            };
-        }
-    }
-
-    @Override
     public void createDirectory(final Path dir, final FileAttribute<?>... attrs) throws IOException {
         throw new UnsupportedOperationException("createDirectory is not supported by the file system");
     }
@@ -224,7 +173,7 @@ Debug.println("SeekableByteChannelForWriting::close: scpecial: " + path);
      * @see FileSystemProvider#checkAccess(Path, AccessMode...)
      */
     @Override
-    public void checkAccess(final Path path, final AccessMode... modes) throws IOException {
+    protected void checkAccessImpl(final Path path, final AccessMode... modes) throws IOException {
         final Object entry = cache.getEntry(path);
 
         if (!isFile(entry)) {
@@ -249,7 +198,7 @@ Debug.println("SeekableByteChannelForWriting::close: scpecial: " + path);
      */
     @Nonnull
     @Override
-    public Object getPathMetadata(final Path path) throws IOException {
+    protected Object getPathMetadataImpl(final Path path) throws IOException {
         return cache.getEntry(path);
     }
 
